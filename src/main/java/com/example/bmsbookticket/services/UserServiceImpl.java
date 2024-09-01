@@ -12,8 +12,7 @@ import java.util.Optional;
 public class UserServiceImpl implements UserService {
     @Autowired
     private UserRepository userRepository;
-    @Autowired
-    private BCryptPasswordEncoder passwordEncoder;
+    private static final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
     @Override
     public User signupUser(String name, String email, String password) throws Exception {
         Optional<User> optionalUser = userRepository.findByEmail(email);
@@ -22,6 +21,7 @@ public class UserServiceImpl implements UserService {
         User user = new User();
         user.setName(name);
         user.setEmail(email);
+
         password = passwordEncoder.encode(password);
         user.setPassword(password);
         return userRepository.save(user);
